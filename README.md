@@ -1,27 +1,21 @@
-# lib-installer-example-arduino
+# libnima-example-arduino
 
-A small library made to try [lib-installer](https://github.com/nimaltd/lib-installer) on, and a starting point for making your own library installable for Arduino.
+A small library made to try [libNIMA](https://github.com/nimaltd/libNIMA) on, and a starting point for making your own library installable for Arduino.
 
 It does one useful thing. `example_due()` says yes once every `EXAMPLE_PERIOD_MS` milliseconds and never blocks, so `loop()` can blink an LED, read a sensor or print a line on a rhythm without `delay()` holding everything else up. `example_hello()` prints `EXAMPLE_GREETING` on Serial. Both settings are in `example_config.h`. Its `uptime` option adds `example_uptime()`, the time since start up in hours, minutes and seconds. It builds for any board.
 
-It also has a step for the installer to run, so you can see one work: installed into a sketch, `make-id` makes `example_id.h` in the sketch's folder, the board's own ID, a random number. The installer shows what it runs and asks first. Its script stays in the library's folder, named `{library}/tools/make_id.py`, which is the library's folder wherever it went.
+It also has a step for libNIMA to run, so you can see one work: installed into a sketch, `make-id` makes `example_id.h` in the sketch's folder, the board's own ID, a random number. libNIMA shows what it runs and asks first. Its script stays in the library's folder, named `{library}/tools/make_id.py`, which is the library's folder wherever it went.
 
 ---
 
-## Try the installer with it
+## Try libNIMA with it
 
-Install the installer once:
-
-```bash
-pip install lib-installer
-```
-
-It needs lib-installer 4.0.0 or newer. `pip install --upgrade lib-installer` brings an older one up to date.
+Get libNIMA once per machine from [its releases page](https://github.com/nimaltd/libNIMA/releases/latest): the installer for Windows, macOS or Linux, which puts the `libnima` command on your PATH as well.
 
 Then, from your sketch's folder, the one holding `blink.ino` for a sketch called `blink`:
 
 ```bash
-lib-installer nimaltd/lib-installer-example-arduino
+libnima nimaltd/libnima-example-arduino
 ```
 
 It asks where the library goes. Press Enter, and it goes into the libraries folder of your sketchbook, where Library Manager installs to, for every sketch:
@@ -111,7 +105,7 @@ Run the install command again: every file is replaced, and your settings are sti
 **Add a part, and take it out.** `--with uptime` adds `example_uptime.h` and `example_uptime.cpp`. `--without uptime` takes them out again.
 
 ```bash
-lib-installer nimaltd/lib-installer-example-arduino --with uptime
+libnima nimaltd/libnima-example-arduino --with uptime
 ```
 
 ```cpp
@@ -123,28 +117,28 @@ example_uptime_t up = example_uptime();   /* up.hours, up.minutes, up.seconds */
 **Uninstall it.** From the sketch it is in, or from anywhere for the libraries folder. Its files go, and a configuration header with your settings in it is saved beside them first, as a `.bak`. `example_id.h` stays in the sketch, since it is yours:
 
 ```bash
-lib-installer --uninstall example
+libnima --uninstall example
 ```
 
-**Without internet.** Download this repository as a zip, from the green **Code** button, **Download ZIP**, and give the installer the zip instead of the name:
+**Without internet.** Download this repository as a zip, from the green **Code** button, **Download ZIP**, and give libNIMA the zip instead of the name:
 
 ```bash
-lib-installer D:/Downloads/lib-installer-example-arduino-main.zip
+libnima D:/Downloads/libnima-example-arduino-main.zip
 ```
 
 ---
 
 ## Make your own library installable
 
-Copy [`installer.yml`](installer.yml) to the root of your library's repository, and change what is yours: its name, its description, its repository, its files, and the `arduino` part that `library.properties` is written from. Every key the installer reads is in it, with a comment saying what it does; the ones this library has no use for are commented out. Only `name` and its `headers` or `sources` are required.
+Copy [`libnima.yml`](libnima.yml) to the root of your library's repository, and change what is yours: its name, its description, its repository, its files, and the `arduino` part that `library.properties` is written from. Every key libNIMA reads is in it, with a comment saying what it does; the ones this library has no use for are commented out. Only `name` and its `headers` or `sources` are required.
 
 Then anyone installs your library with:
 
 ```bash
-lib-installer yourname/yourlibrary
+libnima yourname/yourlibrary
 ```
 
-Keep the code in `src/`, the headers beside the code that includes them, and `extern "C"` in every header of C code, as this one has. `run` lists the steps run after an install into a sketch, with the script in [`tools/make_id.py`](tools/make_id.py). The [lib-installer README](https://github.com/nimaltd/lib-installer#for-someone-writing-a-library) has the rest.
+Keep the code in `src/`, the headers beside the code that includes them, and `extern "C"` in every header of C code, as this one has. `run` lists the steps run after an install into a sketch, with the script in [`tools/make_id.py`](tools/make_id.py). The [libNIMA README](https://github.com/nimaltd/libNIMA#for-someone-writing-a-library) has the rest.
 
 ---
 
